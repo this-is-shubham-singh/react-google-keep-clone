@@ -1,25 +1,55 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Header from "./Header";
+import Footer from "./Footer";
+import CreateNote from "./CreateNote";
+import Note from "./Note";
 
-function App() {
+const App = () => {
+  // ADDITEM is an array
+  // it has all title and content values as an object
+  const [additem, setadditem] = useState([]);
+
+  // called when button is clicked
+  // receving note object as parameter from createnote.js
+  // note has title and content values in object
+  // saving note values in ADDITEM array
+  // prevdata has saved values (title, content) of ADDITEM array
+  // note has new values (title, content) coming from CREATENOTE
+  const addnote = (note) => {
+    setadditem((prevdata) => {
+      // return (" ");
+      return [...prevdata, note];
+    });
+  };
+
+  const ondelete = (id) => {
+    setadditem((olddata) =>
+      olddata.filter((currdata, indx) => {
+        return indx != id;
+      })
+    );
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header />
+      <CreateNote passnote={addnote} />
+
+      {additem.map((val, index) => {
+        return (
+          <Note
+            key={index}
+            id={index}
+            title={val.title}
+            content={val.content}
+            deleteitem={ondelete}
+          />
+        );
+      })}
+
+      <Footer />
+    </>
   );
-}
+};
 
 export default App;
